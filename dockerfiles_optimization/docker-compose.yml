@@ -29,7 +29,7 @@ services:
         container_name: room-layout-microservice
         build:
             context: .
-            dockerfile: build/Dockerfile_lsun
+            dockerfile: docker/Dockerfile_lsun
         restart: always
         working_dir: /app
         command: 'python3 -m lsun_room_app.app --weights-path lsun_room_app/lsun_room.onnx'
