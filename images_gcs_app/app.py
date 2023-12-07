@@ -36,8 +36,6 @@ async def upload_image(
 ) -> int:
     """Upload an image on GCS and save record in database. Return image id."""
     blob_dir = create_blob_dir_name(session_id)
-    # TODO: Process case when image exists: add some random prefix
-    #  This wasn't still done because this case is super unlikely
     if image_name is None:
         image_name = f'{shortuuid.uuid()}.webp'
     blob_name = f'{blob_dir}/{image_name}'
