@@ -1,0 +1,15 @@
+sqlmodel==0.0.8
+google==3.0.0
+google-cloud-storage==2.8.0
+pytz==2023.3
+loguru==0.7.0
+numpy==1.23.4
+opencv-python-headless==4.7.0.72
+Pillow==9.5.0
+typer==0.7.0
+python-dotenv==1.0.0
+shortuuid==1.0.11
+fastapi==0.103.2
+uvicorn==0.22.0
+python-multipart==0.0.6
+psycopg2==2.8.6
