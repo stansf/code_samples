@@ -1,0 +1,35 @@
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV FORCE_CUDA="1"
+ENV CUDA_HOME="/usr/local/cuda"
+
+# configure timezone, our app depends on it.
+RUN /usr/bin/ln -sf /usr/share/zoneinfo/America/Toronto /etc/localtime
+
+# install software
+RUN apt update \
+    && apt -y install python3-dev python3-pip ffmpeg unzip wget curl cmake screen git libturbojpeg \
+    && apt clean
+
+RUN pip3 install -U pip
+
+RUN pip3 install --no-cache-dir torch==2.0.1+cu118 torchvision==0.15.2+cu118 --index-url https://download.pytorch.org/whl/cu118
+
+WORKDIR /app
+RUN pip3 install gdown && \
+    gdown --fuzzy https://drive.google.com/file/d/1aUJoXM9SQMe0LC38pA8v8r43pPOAaQ-a/edit --output ./model_retrained.ckpt
+
+COPY third_party/lsun-room/requirements.txt ./third_party/lsun-room/requirements.txt
+RUN pip3 install --no-cache-dir -r /app/third_party/lsun-room/requirements.txt
+
+COPY lsun_room_app/requirements.txt ./lsun_room_app/requirements.txt
+RUN pip3 install --no-cache-dir -r /app/lsun_room_app/requirements.txt
+
+COPY third_party/lsun-room ./third_party/lsun-room/
+RUN pip3 install -e third_party/lsun-room
+# Download backbone model from torch-hub
+RUN python3 -m lsun_room.pre_download_resnet
+RUN mv /app/model_retrained.ckpt /app/third_party/lsun-room/
+
+COPY lsun_room_app ./lsun_room_app/

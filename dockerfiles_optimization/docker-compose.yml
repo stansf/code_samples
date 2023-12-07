@@ -1,0 +1,50 @@
+version: '3.5'
+
+services:
+    depthestimation:
+        container_name: depth-microservice
+        build:
+            context: .
+            dockerfile: docker/Dockerfile_Depth
+        restart: always
+        working_dir: /app
+        command: 'python3 -m depthapp.app --weights-path third_party/ZoeDepth/ZoeD_M12_NK.pt'
+        environment:
+            - NVIDIA_VISIBLE_DEVICES=0
+            - DEPTH_APP_PORT=8001
+        ports:
+            - "8001:8001"
+        deploy:
+            restart_policy:
+                condition: any
+
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          device_ids: [ '0' ]
+                          capabilities: [ gpu ]
+
+    room_layout:
+        container_name: room-layout-microservice
+        build:
+            context: .
+            dockerfile: build/Dockerfile_lsun
+        restart: always
+        working_dir: /app
+        command: 'python3 -m lsun_room_app.app --weights-path lsun_room_app/lsun_room.onnx'
+        environment:
+            - NVIDIA_VISIBLE_DEVICES=0
+            - ROOM_LAYOUT_PORT=8002
+        ports:
+            - "8002:8002"
+        deploy:
+            restart_policy:
+                condition: any
+
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          device_ids: [ '0' ]
+                          capabilities: [ gpu ]
