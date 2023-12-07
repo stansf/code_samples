@@ -1,0 +1,7 @@
+aiohttp~=3.8.4
+aqueduct~=1.10.13
+numpy~=1.21.6
+typer~=0.7.0
+onnxruntime-gpu==1.12
+opencv-python~=4.5.1.48
+pillow~=8.2.0
