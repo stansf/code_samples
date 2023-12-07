@@ -1,0 +1,15 @@
+name: "CI"
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  lint:
+    # Lint python code using Ruff package
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: chartboost/ruff-action@v1
+        with:
+          version: 0.0.291
