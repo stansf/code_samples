@@ -8,4 +8,4 @@ Prize-winning place
 
 3-rd place (prize)
 
-![](walruses.png)
+![](walruses.webp)
